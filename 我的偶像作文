@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的偶像 - 互動作文指南</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 針對 iPad 優化：確保內容在寬版面不撐滿，窄版面不跑版 -->
+    <style>
+        body {
+            font-family: 'Inter', 'Noto Sans TC', sans-serif;
+        }
+        .nav-link {
+            /* 導航連結樣式 */
+            @apply px-3 py-2 rounded-md text-sm font-medium text-amber-700 hover:bg-amber-100 hover:text-amber-900 transition-colors;
+        }
+        .nav-link.active {
+            /* 活躍導航連結樣式 */
+            @apply bg-amber-200 text-amber-900;
+        }
+        .section-title {
+            @apply text-3xl font-bold text-amber-800 mb-4;
+        }
+        .section-intro {
+            @apply text-lg text-amber-900 mb-8 max-w-2xl mx-auto;
+        }
+        .card {
+            /* 靈感來源卡片樣式 */
+            @apply bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow cursor-pointer;
+        }
+        .card-title {
+            @apply text-xl font-semibold text-cyan-800 mb-2;
+        }
+        .card-details {
+            /* 點擊展開內容的過渡效果 */
+            @apply text-gray-700 transition-all duration-300 ease-in-out overflow-hidden;
+        }
+        /* 跑版修復: 確保 Tab 按鈕平均分配空間 */
+        .tab-button {
+            @apply flex-1 text-center px-2 py-3 font-semibold rounded-t-lg transition-colors duration-200;
+        }
+        .tab-button.active {
+            @apply bg-white text-cyan-700;
+        }
+        .tab-button:not(.active) {
+            @apply bg-cyan-50 text-cyan-600 hover:bg-cyan-100;
+        }
+        .tab-content {
+            @apply bg-white p-6 rounded-b-lg rounded-tr-lg shadow-inner;
+        }
+        /* 範文欣賞手風琴樣式 */
+        .essay-header {
+            /* 標題區塊，可點擊 */
+            @apply flex flex-col sm:flex-row justify-between items-start sm:items-center bg-cyan-50 p-4 rounded-lg cursor-pointer hover:bg-cyan-100 transition-colors;
+        }
+        .essay-content {
+            /* 內容區塊，預設收合 */
+            @apply p-0 h-0 opacity-0 bg-white border border-t-0 border-cyan-100 rounded-b-lg transition-all duration-300 ease-in-out overflow-hidden;
+        }
+        .essay-content div {
+            /* 內容內部 padding，在 JS 展開時會顯示 */
+            padding: 1rem;
+        }
+    </style>
+</head>
+<body class="bg-amber-50 text-gray-800">
+
+    <!-- Header & Navigation (Sticky for easy section jumping) -->
+    <header class="bg-white/80 backdrop-blur-sm shadow-sm sticky top-0 z-50">
+        <nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex-shrink-0">
+                    <span class="text-xl font-bold text-amber-800">⭐ 作文指南：我的偶像</span>
+                </div>
+                <!-- 導航列在 iPad 橫向和桌面保持完整 -->
+                <div class="hidden sm:block">
+                    <div class="flex space-x-4">
+                        <a href="#section-why" class="nav-link">寫作動機</a>
+                        <a href="#section-ideas" class="nav-link">靈感來源</a>
+                        <a href="#section-outline" class="nav-link">寫作大綱</a>
+                        <a href="#section-quote" class="nav-link">引用技巧</a>
+                        <a href="#section-tips" class="nav-link">寫作教室</a>
+                        <a href="#section-samples" class="nav-link">範文欣賞</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-6xl mx-auto p-4 sm:p-6 lg:p-8">
+
+        <!-- Section 1: Why Write? (寫作動機) -->
+        <section id="section-why" class="text-center py-16">
+            <h2 class="section-title">✏️ 為什麼要寫這個題目？</h2>
+            <p class="section-intro">
+                這不只是一篇作文！這是一個機會，讓我們去思考和學習別人的優點，並找到讓自己變得更棒的目標！
+            </p>
+            <div class="bg-white p-6 rounded-lg shadow-lg max-w-lg mx-auto">
+                <h3 class="text-2xl font-semibold text-cyan-800 mb-3">關鍵在於...</h3>
+                <p class="text-lg text-gray-700">
+                    你的偶像身上有你最想學習的美好特質。
+                    <br>
+                    例如：<span class="font-semibold text-amber-700">毅力、善良、耐心、幽默</span>
+                </p>
+            </div>
+        </section>
+
+        <!-- Section 2: Idol Ideas (靈感來源) -->
+        <section id="section-ideas" class="py-16 bg-amber-100 rounded-lg">
+            <div class="text-center mb-12 px-4">
+                <h2 class="section-title">🔎 靈感來源：誰是你的偶像？</h2>
+                <p class="section-intro">
+                    偶像不一定是名人！點點看下面的卡片，看看你的偶像在哪裡？
+                </p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto px-4">
+                
+                <div class="card" onclick="toggleDetails(this)">
+                    <h3 class="card-title">👨‍👩‍👧‍👦 家人 / 親人</h3>
+                    <div class="card-details h-0">
+                        <p class="mt-4">
+                            <strong class="text-amber-700">特質範例：</strong>
+                            <br>
+                            媽媽（耐心、犧牲、細心）
+                            <br>
+                            爺爺（智慧、樂觀）
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card" onclick="toggleDetails(this)">
+                    <h3 class="card-title">👩‍🏫 老師 / 教練</h3>
+                    <div class="card-details h-0">
+                        <p class="mt-4">
+                            <strong class="text-amber-700">特質範例：</strong>
+                            <br>
+                            老師（嚴謹、鼓勵、專業知識）
+                            <br>
+                            教練（堅持、團隊精神）
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card" onclick="toggleDetails(this)">
+                    <h3 class="card-title">🦸‍♂️ 名人 / 英雄</h3>
+                    <div class="card-details h-0">
+                        <p class="mt-4">
+                            <strong class="text-amber-700">特質範例：</strong>
+                            <br>
+                            科學家（好奇心、屢敗屢戰的毅力）
+                            <br>
+                            運動員（堅持不懈、團隊合作）
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card" onclick="toggleDetails(this)">
+                    <h3 class="card-title">🧑‍🤝‍🧑 身邊的人</h3>
+                    <div class="card-details h-0">
+                        <p class="mt-4">
+                            <strong class="text-amber-700">特質範例：</strong>
+                            <br>
+                            圖書館志工媽媽（溫柔、奉獻）
+                            <br>
+                            同學（專注、負責）
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Essay Outline (寫作大綱) -->
+        <section id="section-outline" class="py-16 text-center">
+            <h2 class="section-title">✍️ 四段式作文大綱 (請抄寫)</h2>
+            <p class="section-intro">
+                這是你文章的骨架！跟著這四段來寫，就能清楚表達你的想法。
+            </p>
+            <div class="space-y-6 max-w-3xl mx-auto">
+                <!-- Step 1 -->
+                <div class="bg-white p-6 rounded-lg shadow-lg flex items-start space-x-4">
+                    <div class="flex-shrink-0 bg-cyan-600 text-white w-10 h-10 rounded-full flex items-center justify-center font-bold text-xl">1</div>
+                    <div>
+                        <h3 class="text-xl font-semibold text-cyan-800 text-left">第一段：點題與介紹</h3>
+                        <p class="text-gray-700 text-left mt-2">
+                            誰是偶像？怎麼認識的？點出最欣賞的特質。
+                        </p>
+                    </div>
+                </div>
+                <!-- Step 2 -->
+                <div class="bg-white p-6 rounded-lg shadow-lg flex items-start space-x-4">
+                    <div class="flex-shrink-0 bg-cyan-600 text-white w-10 h-10 rounded-full flex items-center justify-center font-bold text-xl">2</div>
+                    <div>
+                        <h3 class="text-xl font-semibold text-cyan-800 text-left">第二段：事蹟與名言</h3>
+                        <p class="text-gray-700 text-left mt-2">
+                            舉出一個**具體事蹟**。並在故事中**引用偶像的一句經典話**。
+                        </p>
+                    </div>
+                </div>
+                <!-- Step 3 -->
+                <div class="bg-white p-6 rounded-lg shadow-lg flex items-start space-x-4">
+                    <div class="flex-shrink-0 bg-cyan-600 text-white w-10 h-10 rounded-full flex items-center justify-center font-bold text-xl">3</div>
+                    <div>
+                        <h3 class="text-xl font-semibold text-cyan-800 text-left">第三段：學習與啟發</h3>
+                        <p class="text-gray-700 text-left mt-2">
+                            你想學什麼特質？這個特質對你**現在的生活有什麼改變**？
+                        </p>
+                    </div>
+                </div>
+                <!-- Step 4 -->
+                <div class="bg-white p-6 rounded-lg shadow-lg flex items-start space-x-4">
+                    <div class="flex-shrink-0 bg-cyan-600 text-white w-10 h-10 rounded-full flex items-center justify-center font-bold text-xl">4</div>
+                    <div>
+                        <h3 class="text-xl font-semibold text-cyan-800 text-left">第四段：總結與期許</h3>
+                        <p class="text-gray-700 text-left mt-2">
+                            一句話總結。期許自己未來成為更好的人。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Quote Technique (引用技巧) -->
+        <section id="section-quote" class="py-16 bg-cyan-700 text-white rounded-lg">
+            <div class="text-center mb-10 px-4">
+                <h2 class="section-title text-white">🗣 必殺技：引用名言的技巧</h2>
+                <p class="section-intro text-cyan-100">
+                    這招能讓你的文章更有力量！
+                </p>
+            </div>
+            <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 px-4">
+                <div>
+                    <h3 class="text-2xl font-semibold mb-4">📌 為什麼要用？</h3>
+                    <ul class="space-y-3 text-lg">
+                        <li class="flex items-center"><span class="text-2xl mr-3">✅</span> 增加真實感：讓讀者感覺你真的了解這個人。</li>
+                        <li class="flex items-center"><span class="text-2xl mr-3">💡</span> 表達精神：用一句話抓住偶像的核心價值觀。</li>
+                        <li class="flex items-center"><span class="text-2xl mr-3">💥</span> 加深印象：讓你的文章句子更有力量。</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-2xl font-semibold mb-4">📌 怎麼寫？</h3>
+                    <div class="bg-white/20 p-4 rounded-lg mb-4">
+                        <strong class="text-cyan-100">如果他是名人：</strong>
+                        <p class="mt-1">上網查找他最經典的一句話。<br><em>例如：「他曾說過：『人生不可能永遠一帆風順。』」</em></p>
+                    </div>
+                    <div class="bg-white/20 p-4 rounded-lg">
+                        <strong class="text-cyan-100">如果他是身邊的人：</strong>
+                        <p class="mt-1">寫下他最常說的一句教誨。<br><em>例如：「爸爸常對我說：『你慢慢來，把事情做好比做快更重要。』」</em></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 5: Writing Tips (寫作教室 - 已修正跑版) -->
+        <section id="section-tips" class="py-16">
+            <div class="text-center mb-10 px-4">
+                <h2 class="section-title">💡 寫作小教室：各段魔法提醒</h2>
+                <p class="section-intro">
+                    掌握這些小技巧，讓你的文章更上一層樓！
+                </p>
+            </div>
+            <div class="max-w-4xl mx-auto px-4">
+                <!-- Tabs Navigation - 已優化 iPad 顯示效果 (使用 flex-1) -->
+                <div class="flex border-b border-gray-300">
+                    <button id="tab-btn-1" class="tab-button active" onclick="switchTab(1)">
+                        段落 1 & 2：開頭與事蹟
+                    </button>
+                    <button id="tab-btn-2" class="tab-button" onclick="switchTab(2)">
+                        段落 3 & 4：影響與結尾
+                    </button>
+                </div>
+                
+                <!-- Tabs Content -->
+                <div id="tab-content-1" class="tab-content">
+                    <h3 class="text-xl font-semibold text-cyan-800 mb-4">1️⃣ 第一段：開門見山，鎖定主題</h3>
+                    <ul class="list-disc list-inside space-y-2 mb-6">
+                        <li><strong class="text-red-600">避免：</strong> 囉嗦的開頭。</li>
+                        <li><strong class="text-green-600">目標：</strong> 在前三句內，讓讀者知道「誰是你的偶像」以及「為什麼是他」。</li>
+                        <li><em>例如：「我的偶像是我的鋼琴老師林老師，她最有魅力的地方，就是她那份永不放棄的堅持。」</em></li>
+                    </ul>
+                    <hr class="my-6">
+                    <h3 class="text-xl font-semibold text-cyan-800 mb-4">2️⃣ 第二段：讓故事有畫面感</h3>
+                    <ul class="list-disc list-inside space-y-2">
+                        <li><strong class="text-blue-600">技巧：</strong> 使用「五感」描寫（聽、看、聞、摸、感受）。</li>
+                        <li><strong class="text-green-600">目標：</strong> 寫出具體細節，而不是只說「他很努力」。</li>
+                        <li><em>例如：「當時他跌倒在跑道上，膝蓋流血，但我看到他的眼神裡，沒有眼淚，只有堅定。他咬著牙，重新站起來，口中唸著教練常說的：『堅持到底，沒有失敗者。』」</em></li>
+                    </ul>
+                </div>
+
+                <div id="tab-content-2" class="tab-content hidden">
+                    <h3 class="text-xl font-semibold text-cyan-800 mb-4">3️⃣ 第三段：寫出「我的改變」</h3>
+                    <ul class="list-disc list-inside space-y-2 mb-6">
+                        <li><strong class="text-red-600">避免：</strong> 只說空話，例如「我以後也要像他一樣努力」。</li>
+                        <li><strong class="text-green-600">目標：</strong> 寫出一個「具體行動」證明偶像對你的影響。</li>
+                        <li><em>例如：「以前看到數學難題就想放棄，但現在，我會想起他面對失敗的樣子，告訴自己：『再算一遍！』就是這股力量，讓我這次月考的數學成績進步了十分。」</em></li>
+                    </ul>
+                    <hr class="my-6">
+                    <h3 class="text-xl font-semibold text-cyan-800 mb-4">4️⃣ 第四段：有力的總結</h3>
+                    <ul class="list-disc list-inside space-y-2">
+                        <li><strong class="text-blue-600">技巧：</strong> 回應開頭，讓文章首尾呼應。</li>
+                        <li><strong class="text-green-600">目標：</strong> 再次強調偶像的特質，並許下承諾。</li>
+                        <li><em>例如：「我的偶像，他就像是我的指引燈塔。我會帶著他這份溫柔的特質，繼續前進，期許自己也能像他一樣，帶給身邊的人溫暖和力量。」</em></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Section 6: Sample Essays (範文欣賞 - 新增三篇，優化 iPad 觸控體驗) -->
+        <section id="section-samples" class="py-16 bg-amber-100 rounded-lg">
+            <div class="text-center mb-10 px-4">
+                <h2 class="section-title">✨ 範文欣賞：學習寫作的榜樣</h2>
+                <p class="section-intro">
+                    看看別人怎麼運用四段大綱和引用名言的技巧，讓文章更有故事性！點擊標題即可展開全文。
+                </p>
+            </div>
+            <div class="max-w-4xl mx-auto px-4 space-y-4" id="essay-list">
+                <!-- 範文內容將由 JS 渲染 -->
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="text-center py-8 bg-white shadow-inner-top">
+        <p class="text-gray-600">加油！寫出你心中最棒的故事！🎉</p>
+    </footer>
+
+    <script>
+        // 範文數據，包含戴資穎範例
+        const essays = [
+            {
+                id: 1,
+                title: "範文一：我的偶像—羽球女王戴資穎 (主題：永不放棄的堅持)",
+                author: "小作者：羽球小子",
+                content: `我的偶像不是影視歌星，而是台灣的羽球女王戴資穎。我是在電視上看到她比賽時認識她的，她那份在球場上永不放棄的**堅持**和對自我要求的**自律**，讓我下定決心要學習她。\n\n戴資穎最讓人感動的是她如何面對低潮。她並非一帆風順，也經歷過輸球和懷疑自己的時刻。但無論遇到多強勁的對手，她總是保持冷靜，不斷奔跑接球。她曾經在受訪時說過一句話，深深烙印在我心裡：「**盡力去打，不要留下遺憾。**」這句話不是要她一定要贏，而是提醒她要對得起自己的努力。她用這份精神，一次次地贏回世界第一的寶座，證明了只要努力，小個子也能有巨大的能量。\n\n戴資穎的「盡力去打」這句話，對我的影響非常大。以前我在體育課跑大隊接力時，跑到一半累了就想放慢速度。但現在，只要一想到她這句話，我就會咬緊牙關，全力衝刺到終點。我從她身上學到，無論結果如何，只要自己努力到最後一刻，就是勝利。我正努力學習她的自律精神，每天晚上規劃好讀書時間，不再拖延。\n\n戴資穎不僅是台灣的驕傲，更是我人生的導師。我立志要學習她那份不畏艱難的決心，並且像她一樣，用最好的表現來回饋所有支持我的人。我要從每天的運動和學習中，實踐「盡力去打，不要留下遺憾」的信念，成為一個有韌性、有擔當的人。`
+            },
+            {
+                id: 2,
+                title: "範文二：我的偶像—環保發明家王明陽 (主題：屢敗屢戰的毅力)",
+                author: "小作者：科學探險家",
+                content: `我的偶像是著名的環保發明家王明陽先生。他發明的「水質淨化機」讓許多受污染的河流重新變回清澈的樣子。我是在科學雜誌上認識他的，從那時起，他就成了我心中最閃亮的星星，因為他讓我看到了**毅力**和**善良**的力量。\n\n王先生最讓我敬佩的，是他從不向失敗低頭的精神。為了發明這台淨化機，他曾經歷了上百次的失敗，有時候實驗室會爆炸，有時候會因為資金用盡而暫時停工。但他從來沒有放棄，他總是對
